@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prismas · Lista 4 · Folha de respostas</title>
+<style>
+:root{--bg:#f3f5f7;--card:#fff;--ink:#1b2631;--mut:#5b6977;--ac:#0b6e78;--acf:#fff;--ln:#d3dae0;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--bg:#10171d;--card:#18222b;--ink:#e6ebef;--mut:#9aa8b5;--ac:#4fc0cc;--acf:#08262a;--ln:#2d3b47;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Georgia,"Times New Roman",serif}
+main{max-width:720px;margin:0 auto;padding:16px}
+h1{font-size:1.35rem;margin:0 0 8px}h2{font-size:1.1rem;margin:0 0 6px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:10px;padding:14px;margin:12px 0}
+.mut{color:var(--mut);font-size:.9rem}
+button{font:inherit;cursor:pointer;border:1px solid var(--ln);background:var(--card);color:var(--ink);border-radius:8px;padding:8px 14px}
+button.p{background:var(--ac);color:var(--acf);border-color:var(--ac);font-weight:700}
+button.on{border-color:var(--ac);outline:2px solid var(--ac)}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.gs{display:flex;gap:8px;flex-wrap:wrap}.gs button{min-width:52px;font-size:1.15rem;font-weight:700}
+input[type=text],textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:8px}
+label{display:block;font-size:.85rem;color:var(--mut);margin:8px 0 2px}
+.row{display:flex;gap:10px}.row>div{flex:1}.row>.n{flex:0 0 90px}
+.ban{border-radius:10px;padding:12px;margin:12px 0;font-weight:700;text-align:center}.ban.t{background:var(--card);border:1px solid var(--ln);color:var(--ac);font-size:1.4rem;font-variant-numeric:tabular-nums}.ban.f{background:#b3412f;color:#fff}input:disabled{opacity:.75}
+</style></head><body><main>
+<h1>Prismas · Lista 4 · Folha de respostas</h1>
+<div id="app"></div>
+</main>
+<script>
+const EXS={
+5:{t:"Exercício 5 · cubo e círculo",q:"As faces de um cubo são inscritíveis em círculos de 7,29π cm² de área. Calcule: a) a medida da diagonal; b) a área total; c) o volume do cubo.",p:["Raio e aresta: calcule o raio do círculo e a aresta do cubo.","Diagonal do cubo (item a).","Área total (item b).","Volume (item c)."]},
+6:{t:"Exercício 6 · prisma oblíquo",q:"Num prisma oblíquo a aresta lateral mede 5 cm; a seção reta é um trapézio isósceles de altura 8 cm e bases 7 cm e 19 cm. Calcule a área lateral.",p:["Figura e lado oblíquo: calcule o lado não paralelo do trapézio.","Perímetro da seção reta.","Justificativa: por que a área lateral é o perímetro da seção reta vezes a aresta lateral.","Área lateral."]},
+13:{t:"Exercício 13 · ortoedro (vale em dobro)",q:"Um ortoedro tem diagonal 13 cm e área total 192 cm². A seção por um plano que contém duas arestas opostas tem área 60 cm². Calcule as dimensões.",p:["Soma x+y+z e equação da área da seção.","Possíveis valores da aresta z paralela às arestas da seção.","Dimensões no primeiro caso, com verificação.","Dimensões no segundo caso, com verificação, e por que há duas soluções."]},
+15:{t:"Exercício 15 · ortoedro com cubo",q:"Sobre a base quadrada de um ortoedro constrói-se exteriormente um cubo cuja base é o quadrado de vértices nos pontos médios dos lados dessa base. A altura do ortoedro é 2/3 do lado da base e a soma das dimensões do ortoedro é 16 cm. Calcule o volume e a área da superfície do sólido.",p:["Dimensões do ortoedro e aresta do cubo.","Volume do sólido.","Área total do ortoedro e área total do cubo.","Área da superfície do sólido, descontando a região de contato."]},
+16:{t:"Exercício 16 · cubo e diagonal (vale em dobro)",q:"Demonstre que, em um cubo: a) as arestas são igualmente inclinadas em relação a uma diagonal qualquer; b) as projeções das arestas sobre qualquer diagonal são iguais à terça parte da diagonal.",p:["Coordenadas do cubo, uma diagonal e o seu comprimento.","Ângulo entre a diagonal e as três arestas de um vértice.","Item a: conclusão para as 12 arestas e qualquer diagonal.","Item b: projeção e conclusão."]}};
+const ORD=[5,6,13,15,16],GS="ABCDE",W=720,P=780;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ls={g(k){try{return localStorage.getItem(k)}catch(e){return null}},s(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const exOf=(g,r)=>ORD[(GS.indexOf(g)+r-1)%5];
+const T0=+(new URLSearchParams(location.hash.slice(1)).get("t"))||0;
+let grp=ls.g("grp"),key="";
+const draft=k=>{let d=null;try{d=JSON.parse(ls.g("d_"+k))}catch(e){}return d||{res:["","","",""],quem:["","","",""],aud:""}};
+function phase(){
+  if(!T0)return{p:"sem"};
+  const s=(Date.now()-T0)/1000;
+  if(s<0)return{p:"antes",rest:-s};
+  const R=Math.floor(s/P);if(R>=5)return{p:"fim"};
+  const w=s-R*P;return w<W?{p:"ativa",r:R+1,rest:W-w}:{p:"troca",r:R+1,rest:P-w};
+}
+const mmss=s=>{s=Math.max(0,Math.ceil(s));return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
+function render(){
+  const ph=phase();key=ph.p+(ph.r||"");
+  let h=`<div class="card"><h2>Grupo</h2><div class="gs">${GS.split("").map(g=>`<button data-g="${g}" class="${g===grp?"on":""}">${g}</button>`).join("")}</div></div>`;
+  if(ph.p==="sem")h+=`<div class="card">Abra o link da aula enviado pela professora. Sem ele, o relógio não funciona.</div>`;
+  else if(ph.p==="antes")h+=`<div class="ban t" id="tm"></div><div class="card">A rodada 1 começa em instantes. Escolham o grupo e aguardem.</div>`;
+  else if(ph.p==="fim")h+=`<div class="ban f">Aula encerrada</div>`;
+  else if(!grp)h+=`<div class="card">Escolha o seu grupo para ver o exercício.</div>`;
+  else{
+    const r=ph.r,ex=exOf(grp,r),E=EXS[ex],d=draft(r+"_"+grp),off=ph.p==="troca"?"disabled":"";
+    h+=ph.p==="ativa"?`<div class="ban t" id="tm"></div>`:`<div class="ban f">Tempo esgotado · troquem de estação · próxima rodada em <span id="tm"></span></div>`;
+    h+=`<div class="card"><h2>Rodada ${r} de 5 · ${E.t}</h2><p>${esc(E.q)}</p></div>`;
+    E.p.forEach((p,i)=>{h+=`<div class="card"><h2>Passo ${i+1}</h2><p class="mut">${esc(p)}</p>
+      <div class="row"><div class="n"><label>Aluno nº</label><input type="text" inputmode="numeric" data-f="quem" data-i="${i}" value="${esc(d.quem[i])}" ${off}></div>
+      <div><label>Resposta</label><input type="text" data-f="res" data-i="${i}" value="${esc(d.res[i])}" ${off}></div></div></div>`});
+    h+=`<div class="card"><label>Auditor(es) nº</label><input type="text" data-f="aud" value="${esc(d.aud)}" ${off}></div>`;
+  }
+  $("#app").innerHTML=h;tick();
+}
+function tick(){
+  const ph=phase();if(ph.p+(ph.r||"")!==key){render();return}
+  const t=$("#tm");if(t&&ph.rest!=null)t.textContent=mmss(ph.rest);
+}
+setInterval(tick,500);
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button");if(b&&b.dataset.g){grp=b.dataset.g;ls.s("grp",grp);render()}
+});
+document.addEventListener("input",e=>{
+  const t=e.target,f=t.dataset&&t.dataset.f,ph=phase();
+  if(!f||!grp||ph.p!=="ativa")return;
+  const k=ph.r+"_"+grp,d=draft(k);
+  if(f==="aud")d.aud=t.value;else d[f][+t.dataset.i]=t.value;
+  ls.s("d_"+k,JSON.stringify(d));
+});
+render();
+</script></body></html>
